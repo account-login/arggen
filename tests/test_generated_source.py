@@ -1,6 +1,7 @@
 import subprocess
 import os
 import re
+import sys
 from typing import Sequence, Dict
 
 from arggen import (
@@ -14,7 +15,7 @@ def file_time(filename: str):
 
 def cmd(*args):
     print('run_cmd: ', args)
-    subprocess.check_call(args)
+    subprocess.check_call(args, stderr=sys.stderr)
 
 
 def get_env():
