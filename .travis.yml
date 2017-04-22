@@ -12,5 +12,5 @@ install:
 
 # command to run tests
 script:
-  - pytest -sv --cov=arggen tests/
+  - pytest -sv --cov=arggen --cov=tests tests/
   - codecov
