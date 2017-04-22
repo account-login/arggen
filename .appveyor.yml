@@ -5,6 +5,7 @@ environment:
     - PYTHON: "C:\\Python36"
     - PYTHON: "C:\\Python36-x64"
   PATH: "%PYTHON%;%PYTHON%\\scripts;%PATH%"
+  CXX: "C:\\MinGW\\bin\\g++.exe"
 
 install:
   # We need wheel installed to build wheels
