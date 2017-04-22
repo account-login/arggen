@@ -5,7 +5,7 @@ environment:
     - PYTHON: "C:\\Python36"
     - PYTHON: "C:\\Python36-x64"
   PATH: "%PYTHON%;%PYTHON%\\scripts;%PATH%"
-  CXX: "C:\\MinGW\\bin\\g++.exe"
+  CXX: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw32\bin\g++.exe
 
 install:
   # We need wheel installed to build wheels
@@ -13,7 +13,7 @@ install:
   - python setup.py sdist bdist_wheel
   - pip install .[ci]
   # debug
-  - C:\MinGW\bin\g++.exe -Wall -Wextra -std=c++11 -c tests/catch.cpp
+  - "%CXX%" -Wall -Wextra -std=c++11 -c tests/catch.cpp
 
 build: off
 
