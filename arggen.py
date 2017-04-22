@@ -18,6 +18,7 @@ class ArgType(enum.Enum):
 class ValueType(enum.Enum):
     STRING = object()
     INT = object()
+    # TODO: float
     BOOL = object()
 
 
@@ -135,7 +136,7 @@ def get_value_type_and_default(name: str, arg_type: ArgType, param: Dict):
     return value_type, default
 
 
-def process_user_arg_info(argsinfo: Sequence[UserArgInfo]):
+def process_config(argsinfo: Sequence[UserArgInfo]):
     has_rest = False
     options_set = set()         # type: Set[str]
     name_set = set()            # type: Set[str]
@@ -173,11 +174,7 @@ def process_user_arg_info(argsinfo: Sequence[UserArgInfo]):
     return arginfo_list
 
 
-value_type_to_cxx_type = {
-    ValueType.STRING: 'std::string',
-    ValueType.INT: 'int',
-    ValueType.BOOL: 'bool',
-}
+# begin source generation utils
 
 
 class BadSourceStructure(Exception):
@@ -348,8 +345,20 @@ def collect_node(gen) -> Root:
     return ctx.root
 
 
+# end source generation utils
+
+# begin xxx_gen
+
+
 def repr_c_string(string: str):
     return json.dumps(string)
+
+
+value_type_to_cxx_type = {
+    ValueType.STRING: 'std::string',
+    ValueType.INT: 'int',
+    ValueType.BOOL: 'bool',
+}
 
 
 def struct_gen(ctx: Context, struct_name: str, argsinfo: Sequence[ArgInfo]):
@@ -673,3 +682,32 @@ def source_gen(ctx: Context, struct_name: str, argsinfo: Sequence[ArgInfo], sour
     yield from ('', '')
     yield from parse_argv_method_gen(ctx, struct_name)
     yield ''
+
+
+# end xxx_gen
+
+
+def is_config_list(lst: Sequence):
+    if not isinstance(lst, (list, tuple)):
+        return False
+    for value in lst:
+        if not (isinstance(value, tuple) and len(value) == 3 and isinstance(value[0], ArgType)):
+            return False
+    return True
+
+
+def parse_config_string(string: str):
+    local = dict()
+    exec(string, globals(), local)
+
+    result = dict()
+    for key, value in local.items():
+        if is_config_list(value):
+            result[key] = value
+    return result
+
+
+def parse_config_file(filename: str):
+    with open(filename, 'rt') as fp:
+        content = fp.read()
+    return parse_config_string(content)

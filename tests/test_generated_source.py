@@ -6,7 +6,7 @@ from typing import Sequence, Dict
 
 from arggen import (
     flag, count, arg, rest, ValueType,
-    process_user_arg_info, collect_node, header_gen, source_gen,
+    process_config, collect_node, header_gen, source_gen,
 )
 
 
@@ -51,7 +51,7 @@ def test_generate_source():
         arg('haha', name='hahaha'),
         rest('asdf')
     ]
-    argsinfo = process_user_arg_info(uai)
+    argsinfo = process_config(uai)
     struct_name = 'MyOption'
     source_name = 'test'
 
