@@ -5,8 +5,7 @@ import re
 from typing import Sequence, Dict
 
 from arggen import (
-    flag, count, arg, rest, ValueType,
-    process_config, collect_node, header_gen, source_gen,
+    flag, count, arg, rest, ValueType, generate_files,
 )
 
 
@@ -38,11 +37,6 @@ def link_objects(env: Dict, objects: Sequence[str], output: str):
 
 
 def test_generate_source():
-    def get_source(gen):
-        g = partial(gen, struct_name=struct_name, argsinfo=argsinfo, source_name=source_name)
-        node = collect_node(g)
-        return '\n'.join(node.to_source(0))
-
     uai = [
         flag('--foo', '-f'),
         count('-v', '--verbose'),
@@ -51,15 +45,7 @@ def test_generate_source():
         arg('haha', name='hahaha'),
         rest('asdf')
     ]
-    argsinfo = process_config(uai)
-    struct_name = 'MyOption'
-    source_name = 'test'
-
-    with open('tests/test.h', 'wt+') as fp:
-        fp.write(get_source(header_gen))
-
-    with open('tests/test.cpp', 'wt+') as fp:
-        fp.write(get_source(source_gen))
+    generate_files(dict(MyOption=uai), 'tests/test')
 
     env = get_env()
     env['CXXFLAGS'].extend(['-std=c++11', '-Wall', '-Wextra'])

@@ -1,6 +1,8 @@
 import enum
+from functools import partial
 import json
 import re
+import os
 from typing import Set, Sequence, Tuple, Dict, List
 
 
@@ -136,13 +138,13 @@ def get_value_type_and_default(name: str, arg_type: ArgType, param: Dict):
     return value_type, default
 
 
-def process_config(argsinfo: Sequence[UserArgInfo]):
+def process_config(conf: Sequence[UserArgInfo]):
     has_rest = False
     options_set = set()         # type: Set[str]
     name_set = set()            # type: Set[str]
     arginfo_list = []           # type: List[ArgInfo]
 
-    for arg_type, options, param in argsinfo:
+    for arg_type, options, param in conf:
         for opt in options:
             if opt in options_set:
                 raise ArgError('duplicated option %s' % (opt,))
@@ -711,3 +713,28 @@ def parse_config_file(filename: str):
     with open(filename, 'rt') as fp:
         content = fp.read()
     return parse_config_string(content)
+
+
+class BadConfiguration(Exception):
+    pass
+
+
+def generate_files(configs: Dict, output: str):
+    def get_source(gen):
+        g = partial(gen, struct_name=struct_name, argsinfo=argsinfo, source_name=source_name)
+        node = collect_node(g)
+        return '\n'.join(node.to_source(0))
+
+    if len(configs) == 0:
+        raise BadConfiguration('no entry found')
+    if len(configs) > 1:
+        raise BadConfiguration('multiple entry')
+
+    source_name = os.path.basename(output)
+    struct_name, conf = next(iter(configs.items()))
+    argsinfo = process_config(conf)
+
+    with open(f'{output}.h', 'wt+') as fp:
+        fp.write(get_source(header_gen))
+    with open(f'{output}.cpp', 'wt+') as fp:
+        fp.write(get_source(source_gen))
