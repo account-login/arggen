@@ -579,7 +579,7 @@ def parse_args_method_gen(ctx: Context, struct_name: str, argsinfo: Sequence[Arg
                                                 yield f'ans.{info.name}++;'
 
                                     with ctx.ELSE():
-                                        yield 'throw ArgError("Unknown flag :" + *it);'
+                                        yield 'throw ArgError("Unknown flag: " + std::string(1, *it));'
 
                 # positional args
                 with ctx.ELSE():
