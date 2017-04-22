@@ -8,6 +8,9 @@ import sys
 from typing import Set, Sequence, Tuple, Dict, List
 
 
+__version__ = '0.0.1.dev0'
+
+
 class ArgError(Exception):
     pass
 
@@ -745,6 +748,7 @@ def generate_files(configs: Dict, output: str):
 def main(args=None):
     ap = argparse.ArgumentParser(prog='arggen')
     ap.add_argument('config_file')
+    ap.add_argument('--version', '-V', action='version', version='%(prog)s ' + __version__)
 
     if args is None:
         args = sys.argv[1:]

@@ -1,9 +1,11 @@
 from setuptools import setup
 
+import arggen
+
 
 setup(
     name='arggen',
-    version='',
+    version=arggen.__version__,
     py_modules=['arggen'],
     entry_points={
         'console_scripts': ['arggen=arggen:main'],
