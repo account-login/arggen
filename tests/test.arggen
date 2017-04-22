@@ -1,0 +1,8 @@
+MyOption = [
+        flag('--foo', '-f'),
+        count('-v', '--verbose'),
+        arg('--bar', '-b', type=ValueType.INT, default=123),
+        arg('--qwer'),
+        arg('haha', name='hahaha'),
+        rest('asdf')
+]

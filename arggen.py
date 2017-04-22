@@ -1,8 +1,10 @@
+import argparse
 import enum
 from functools import partial
 import json
 import re
 import os
+import sys
 from typing import Set, Sequence, Tuple, Dict, List
 
 
@@ -738,3 +740,23 @@ def generate_files(configs: Dict, output: str):
         fp.write(get_source(header_gen))
     with open(f'{output}.cpp', 'wt+') as fp:
         fp.write(get_source(source_gen))
+
+
+def main(args=None):
+    ap = argparse.ArgumentParser(prog='arggen')
+    ap.add_argument('config_file')
+
+    if args is None:
+        args = sys.argv[1:]
+    prog_args = ap.parse_args(args=args)
+
+    configs = parse_config_file(prog_args.config_file)
+
+    output, ext = os.path.splitext(prog_args.config_file)
+    if ext in ('.cpp', '.h'):
+        raise BadConfiguration('input file is the same as output')
+    generate_files(configs, output)
+
+
+if __name__ == '__main__':
+    main()

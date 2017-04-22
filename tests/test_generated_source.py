@@ -1,11 +1,10 @@
-from functools import partial
 import subprocess
 import os
 import re
 from typing import Sequence, Dict
 
 from arggen import (
-    flag, count, arg, rest, ValueType, generate_files,
+    flag, count, arg, rest, ValueType, generate_files, main,
 )
 
 
@@ -37,15 +36,7 @@ def link_objects(env: Dict, objects: Sequence[str], output: str):
 
 
 def test_generate_source():
-    uai = [
-        flag('--foo', '-f'),
-        count('-v', '--verbose'),
-        arg('--bar', '-b', type=ValueType.INT, default=123),
-        arg('--qwer'),
-        arg('haha', name='hahaha'),
-        rest('asdf')
-    ]
-    generate_files(dict(MyOption=uai), 'tests/test')
+    main(['tests/test.arggen'])
 
     env = get_env()
     env['CXXFLAGS'].extend(['-std=c++11', '-Wall', '-Wextra'])
