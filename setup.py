@@ -11,6 +11,9 @@ setup(
         'console_scripts': ['arggen=arggen:main'],
     },
     python_requires='>=3.6',
+    extras_require={
+        'ci': ['pytest', 'pytest-sugar', 'pytest-cov', 'codecov'],
+    },
     url='https://github.com/account-login/arggen',
     license='MIT',
     author='account-login',
