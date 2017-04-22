@@ -77,6 +77,9 @@ def test_invalid_user_arg_info():
     E(count('-v', type=ValueType.BOOL))
     E(flag('asfd', type=ValueType.BOOL))
 
+    # positional args with default value is not on tail
+    E(arg('a'), arg('b', default='b'), arg('c'))
+
 
 def test_parse_config_string():
     input = f'''

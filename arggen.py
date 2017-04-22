@@ -178,6 +178,19 @@ def process_config(conf: Sequence[UserArgInfo]):
 
         arginfo_list.append(ai)
 
+    # check the default argument of positional args
+    default_pos_met = False
+    for info in arginfo_list:
+        if is_position_option(info.options):
+            if not default_pos_met:
+                if info.default is not None:
+                    default_pos_met = True
+            elif info.default is None:
+                raise ArgError(
+                    'default value of positional args only allowed in trailing args, '
+                    f'first error: {info.name}'
+                )
+
     return arginfo_list
 
 
@@ -590,8 +603,13 @@ def parse_args_method_gen(ctx: Context, struct_name: str, argsinfo: Sequence[Arg
                 yield f'throw ArgError("{opt} required");'
 
         yield '// check positional args'
-        position_count = len(position_args)
-        with ctx.IF(f'position_count < {position_count}'):
+        required_position_count = 0
+        for opt in position_args:
+            if option_to_arginfo[opt].default is None:
+                required_position_count += 1
+            else:
+                break
+        with ctx.IF(f'position_count < {required_position_count}'):
             yield 'throw ArgError("expect more argument");'
 
         yield 'return ans;'
