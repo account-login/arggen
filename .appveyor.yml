@@ -4,7 +4,8 @@ environment:
   matrix:
     - PYTHON: "C:\\Python36"
     - PYTHON: "C:\\Python36-x64"
-  PATH: "%PYTHON%;%PYTHON%\\scripts;C:\\MinGW\\bin;%PATH%"
+  MINGW_BIN: "C:\\mingw-w64\\x86_64-6.3.0-posix-seh-rt_v5-rev1\\mingw64\\bin"
+  PATH: "%PYTHON%;%PYTHON%\\scripts;%MINGW_BIN%;%PATH%"
 
 install:
   # We need wheel installed to build wheels

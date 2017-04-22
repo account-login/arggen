@@ -675,7 +675,9 @@ def header_gen(ctx: Context, struct_name: str, argsinfo: Sequence[ArgInfo], sour
 
 
 def source_gen(ctx: Context, struct_name: str, argsinfo: Sequence[ArgInfo], source_name: str):
-    yield '#include <cstring>'
+    yield '#include <cstdlib>   // atol'
+    yield '#include <cstring>   // strlen'
+    yield '#include <string>    // to_string'
     yield f'#include "{source_name}.h"'
     yield ''
     yield from warning_gen()
