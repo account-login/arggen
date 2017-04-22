@@ -48,6 +48,12 @@ if (a) {
 }'''[1:]
 
 
+def test_condition_dangling_else():
+    cond = Condition().add_child(
+        Else().add_child('asdf'))
+    assert '\n'.join(cond.to_source(0)) == 'asdf'
+
+
 def test_nested():
     block = Block('head')\
         .add_child('123')\

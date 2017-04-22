@@ -253,6 +253,12 @@ class Condition(BaseNode):
     def to_source(self, level: int):
         if not self.children:
             raise BadSourceStructure('Condition node has no children')
+
+        if len(self.children) == 1 and isinstance(self.children[0], Else):
+            # allow dangling else
+            yield from self.children[0].to_source_body(level)
+            return
+
         if not isinstance(self.children[0], If):
             raise BadSourceStructure('expect if, got %r' % (self.children[0],))
 
