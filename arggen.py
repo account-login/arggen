@@ -549,7 +549,7 @@ def parse_args_method_gen(ctx: Context, struct_name: str, argsinfo: Sequence[Arg
                                 yield f'ans.{info.name}++;'
 
                         with ctx.ELSE():
-                            yield 'throw ArgError("Unknown option " + piece);'
+                            yield 'throw ArgError("Unknown option: " + piece);'
 
                 # short options
                 with ctx.ELSEIF("piece.size() >= 2 && piece[0] == '-'"):
