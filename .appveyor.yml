@@ -13,7 +13,7 @@ install:
   - python setup.py sdist bdist_wheel
   - pip install .[ci]
   # debug
-  - C:\\MinGW\\bin\\g++.exe -Wall -Wextra -std=c++11 -c tests/catch.cpp
+  - C:\MinGW\bin\g++.exe -Wall -Wextra -std=c++11 -c tests/catch.cpp
 
 build: off
 
