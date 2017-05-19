@@ -185,7 +185,7 @@ def process_config(conf: Sequence[UserArgInfo]):
             if not default_pos_met:
                 if info.default is not None:
                     default_pos_met = True
-            elif info.default is None:
+            elif info.default is None and info.arg_type != ArgType.REST:
                 raise ArgError(
                     'default value of positional args only allowed in trailing args, '
                     f'first error: {info.name}'
