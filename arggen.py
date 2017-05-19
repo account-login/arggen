@@ -411,7 +411,7 @@ def struct_gen(ctx: Context, struct_name: str, argsinfo: Sequence[ArgInfo]):
         yield f'bool operator==(const {struct_name} &rhs) const;'
         yield f'bool operator!=(const {struct_name} &rhs) const;'
         yield f'static {struct_name} parse_args(const std::vector<std::string> &args);'
-        yield f'static {struct_name} parse_argv(int argc, const char *argv[]);'
+        yield f'static {struct_name} parse_argv(int argc, const char *const argv[]);'
 
 
 def accecpt_rest_gen(ctx: Context, info: ArgInfo):
@@ -616,7 +616,7 @@ def parse_args_method_gen(ctx: Context, struct_name: str, argsinfo: Sequence[Arg
 
 
 def parse_argv_method_gen(ctx: Context, struct_name: str):
-    with ctx.BLOCK(f'{struct_name} {struct_name}::parse_argv(int argc, const char *argv[])'):
+    with ctx.BLOCK(f'{struct_name} {struct_name}::parse_argv(int argc, const char *const argv[])'):
         yield 'std::vector<std::string> args;'
         with ctx.BLOCK('for (int i = 1; i < argc; i++)'):
             yield 'args.emplace_back(argv[i]);'
