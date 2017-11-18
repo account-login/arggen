@@ -740,8 +740,12 @@ def parse_config_string(string: str):
     return result
 
 
+def text_open(filename: str, mode: str):
+    return open(filename, mode, encoding='utf8', newline='\n')
+
+
 def parse_config_file(filename: str):
-    with open(filename, 'rt') as fp:
+    with text_open(filename, 'rt') as fp:
         content = fp.read()
     return parse_config_string(content)
 
@@ -765,9 +769,9 @@ def generate_files(configs: Dict, output: str):
     struct_name, conf = next(iter(configs.items()))
     argsinfo = process_config(conf)
 
-    with open(f'{output}.h', 'wt+') as fp:
+    with text_open(f'{output}.h', 'wt+') as fp:
         fp.write(get_source(header_gen))
-    with open(f'{output}.cpp', 'wt+') as fp:
+    with text_open(f'{output}.cpp', 'wt+') as fp:
         fp.write(get_source(source_gen))
 
 
